@@ -2,18 +2,20 @@ import express from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import bcrypt from "bcrypt";
-import mysql from "mysql2/promise";
+import pg from "pg";
+
 
 const app = express();
 const PORT = 3000;
 
-//db
-const connection = await mysql.createConnection({
+const db = new pg.Client({
+    user: "postgres",
     host: "localhost",
-    user: "root",
-    password: "root",
     database: "LibraryDatabase",
+    password: "root",
+    port: 5432,
   });
+db.connect();
 
 
 // Middleware setup
@@ -26,35 +28,21 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Hash a password with bcrypt
-/*async function hashPassword(password) {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
-}*/
-
-async function comparePassword(password, hash) {
-    return await bcrypt.compare(password, hash);
-}
-
 
 // Routes
-app.get('/', (req, res) => {
-    if (req.session.authenticated) {
-        res.render("borrow.ejs");
-    }
-    else
-    res.render ("login.ejs");
-});
-
+//login
 app.post('/login', async (req, res) => {
     const password = req.body.password;
-    const user = req.body.username;
+    const username = req.body.username;
 
-    let query1 = `SELECT a_password FROM Admin where a_username = "${user}" ;`
-    const [results, fields] = await connection.query(query1);
-    const db_pass= results[0].a_password;
-    
-    const match = await comparePassword(password,db_pass);
+
+    const result = await db.query(
+        `SELECT a_password FROM Admin where a_username = '${username}'`
+      );
+     // const pass = result.rows[0];
+      const db_pass = result.rows[0].a_password;
+
+    const match = await bcrypt.compare(password,db_pass);
     if (match) 
         req.session.authenticated = true;
     
@@ -62,29 +50,50 @@ app.post('/login', async (req, res) => {
 
 });
 
-/*
-app.get('/protected', (req, res) => {
+//index
+app.get('/', (req, res) => {
     if (req.session.authenticated) {
-        return res.send('This is a protected page!');
+        res.render("index.ejs");
     }
-    res.redirect('/');
+    else
+    res.render ("login.ejs");
 });
 
-app.get('/protected2', (req, res) => {
+//get addbook
+app.get('/book/addbook', (req, res) => {
     if (req.session.authenticated) {
-        return res.send('This is a protected page! 2');
+        res.render("book/addbook.ejs");
     }
-    res.redirect('/');
+    else
+    res.render ("login.ejs");
 });
 
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send('Could not log out.');
-        }
-        res.redirect('/');
-    });
-}); */
+
+//ini belum pake postgres
+app.post('/book/addbook', async (req, res) => {
+    const bookname = req.body.bookname;
+    const author = req.body.author;
+    const category = req.body.category;
+    let message = `${bookname} cannot be added to library database`;
+
+    const result = await db.query(
+        `INSERT INTO Books (b_name, b_author, b_category, is_borrowed_status)
+        VALUES ('${bookname}', '${author}', '${category}', false)
+        RETURNING b_id;`
+      );
+
+    console.log(result.rows[0].b_id);
+    
+    message = `${bookname} is successfully added to library database`;    
+    
+    res.render("book/addbook.ejs",{message: message});
+});
+
+
+//post addbook
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

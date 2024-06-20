@@ -7,17 +7,18 @@
 
     <style>
 
-        .nav-item .nav-item.nav-link{
+      /*  .nav-item .nav-item.nav-link{
             color:#90E0EF;
         }
 
         .nav-item .nav-item.nav-link:hover{
-            background-color: #CAF0F8; /* Darker background on hover */
+            background-color: #CAF0F8; 
             color: #03045E;
-        }
+         }*/
 
         .nav-item .nav-link.dropdown-toggle{
-            color:#90E0EF;
+            color:#CAF0F8;
+            /*#90E0EF;*/
         }
         .nav-item .nav-link.dropdown-toggle:hover{
             background-color: #CAF0F8; /* Darker background on hover */
@@ -51,9 +52,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <ul class="navbar-nav">
-            <li class="nav-item ">
-                <a class="nav-item nav-link" href="/">Book Borrowing</a>
-            </li>
+            <li class="nav-item dropdown">    
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
+                    Book Borrowing
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">Borrow book</a>
+                    <a class="dropdown-item" href="#">Return book</a>
+                </div>
+            </li>         
 
             <li class="nav-item dropdown">    
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
@@ -61,7 +68,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#">Search book</a>
-                    <a class="dropdown-item" href="#">Add new book</a>
+                    <a class="dropdown-item" href="/book/addbook">Add new book</a>
                     <a class="dropdown-item" href="#">Edit book info</a>
                     <a class="dropdown-item" href="#">Delete book</a>
                 </div>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/layout.css">
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/book/addbook" method="post">
+        <label for="name">Name:</label> 
+        <input type="text" id="bookname" name="bookname" required> 
+        <br>
+        <label for="name">Author:</label> 
+        <input type="text" id="author" name="author" required> 
+        <br>
+        <label for="name">Category:</label> 
+        <input type="text" id="category" name="category" required> 
+        <br>
+        <button type="submit">Add</button>
+
+        </form>    
+        <%=locals.message%>
+
+    </div>
+</body>
+</html>
