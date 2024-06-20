@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+
+        .nav-item .nav-item.nav-link{
+            color:#90E0EF;
+        }
+
+        .nav-item .nav-item.nav-link:hover{
+            background-color: #CAF0F8; /* Darker background on hover */
+            color: #03045E;
+        }
+
+        .nav-item .nav-link.dropdown-toggle{
+            color:#90E0EF;
+        }
+        .nav-item .nav-link.dropdown-toggle:hover{
+            background-color: #CAF0F8; /* Darker background on hover */
+            color: #03045E;
+        }
+
+
+        .dropdown-menu {
+            background-color: #03045E; /* Dark background for dropdown */
+        }
+        .dropdown-menu .dropdown-item {
+            color: #90E0EF; /* Light color for dropdown items */
+        }
+        
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #CAF0F8; /* Darker background on hover */
+            color: #03045E;
+        }
+    </style>    
+
+
+</head>
+<header>
+      <div class="title header"  style="display: flex; align-items: center; justify-content: center; background-color: #03045E;">
+      <h2 style="background-color: #03045E; color: #90E0EF; margin-bottom: 0;"> Library Application </h2>
+      </div>  
+    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #03045E; ">
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <ul class="navbar-nav">
+            <li class="nav-item ">
+                <a class="nav-item nav-link" href="/">Book Borrowing</a>
+            </li>
+
+            <li class="nav-item dropdown">    
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
+                    Book
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">Search book</a>
+                    <a class="dropdown-item" href="#">Add new book</a>
+                    <a class="dropdown-item" href="#">Edit book info</a>
+                    <a class="dropdown-item" href="#">Delete book</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"   >
+                    User
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">User info</a>
+                    <a class="dropdown-item" href="#">Add new user</a>
+                    <a class="dropdown-item" href="#">Edit user data</a>
+                    <a class="dropdown-item" href="#">Delete user</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"   >
+                    Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">Change username</a>
+                    <a class="dropdown-item" href="#">Change password</a>
+                    <a class="dropdown-item" href="#">Logout</a>
+                </div>
+            </li>
+			
+			
+          </ul>
+        </div>
+      </nav>
+</header> 
+<body>
+      <!-- Bootstrap JS and dependencies -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

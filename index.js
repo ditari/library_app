@@ -4,8 +4,6 @@ import bodyParser from 'body-parser';
 import bcrypt from "bcrypt";
 import mysql from "mysql2/promise";
 
-
-
 const app = express();
 const PORT = 3000;
 
@@ -19,6 +17,8 @@ const connection = await mysql.createConnection({
 
 
 // Middleware setup
+app.use(express.static("public"));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     secret: 'your_secret_key',

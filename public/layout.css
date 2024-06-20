@@ -1,0 +1,24 @@
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
+.container-fluid{
+    min-height:100%;
+    background-color: #90E0EF;
+    color: #03045E;
+}
+
+.full-height {
+    height: 100vh;
+    background-color: #90E0EF;
+}
+
+.col{
+    color: #03045E;
+}
+
+button{
+    background-color: #03045E;
+    color: #90E0EF;
+}
