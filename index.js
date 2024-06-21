@@ -74,13 +74,14 @@ app.post('/book/addbook', async (req, res) => {
         const bookname = req.body.bookname;
         const author = req.body.author;
         const category = req.body.category;
+        const isbn = req.body.isbn;
         let  message = `The book cannot be added to library database`;
         let details ={};
         
         const result = await db.query(
-            `INSERT INTO Books (b_name, b_author, b_category, is_borrowed_status)
-            VALUES ('${bookname}', '${author}', '${category}', false)
-            RETURNING b_id;`
+            `INSERT INTO Books (b_name, b_author, b_category, ISBN, is_borrowed_status)
+            VALUES ('${bookname}', '${author}', '${category}','${isbn}', false)
+            RETURNING *;`
           );
     
         let b_id = result.rows[0].b_id;
@@ -88,9 +89,10 @@ app.post('/book/addbook', async (req, res) => {
         {
             message = `The book is successfully added to library database`;
             details.id = b_id;
-            details.bookname = bookname;
-            details.author = author;
-            details.category=category; 
+            details.bookname = result.rows[0].b_bookname;
+            details.author = result.rows[0].b_author;
+            details.category = result.rows[0].b_category;
+            details.isbn=result.rows[0].isbn; 
         
         }    
             
@@ -129,6 +131,7 @@ app.post('/book/deletebook', async (req, res) => {
             details.bookname = result.rows[0].b_bookname;
             details.author = result.rows[0].b_author;
             details.category = result.rows[0].b_category;
+            details.isbn=result.rows[0].isbn; 
         
         }    
             

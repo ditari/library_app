@@ -1,5 +1,6 @@
-# Ignore specific .txt file
+# Ignore specific file
 data.txt
+pg_db.sql
 
 # Node.js dependencies
 node_modules/
