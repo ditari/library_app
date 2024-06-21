@@ -232,6 +232,47 @@ app.post("/user/deleteuser", async (req, res) => {
   res.redirect("/");
 }); 
 
+//check if username available
+app.post('/check-username', async (req, res) => {
+  const username = req.body.username;
+  const result = await db.query(
+    `Select * FROM Admin WHERE a_username = '${username}';`
+  );
+  if (result.rows.length>0) {
+      res.json({ available: false });
+  } else {
+      res.json({ available: true });
+  }
+});
+
+//get change username
+app.get("/admin/username", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("admin/username.ejs");
+  } else res.render("login.ejs");
+ 
+}); 
+
+//post change username, belum dibuat
+app.post("/admin/username", async (req, res) => {
+  if (req.session.authenticated) {
+  {
+    let message = "Cannot change the admin username";
+    const username = req.body.username;
+    const result = await db.query(
+      `UPDATE Admin SET a_username = '${username}' where a_id = ${admin_id} returning *;`
+    );
+    if (result.rows.length>0)
+      message = "Username changed succesfully"; 
+    res.render("admin/username.ejs", {message:message, newusername:username});
+
+  }  
+    //res.render("admin/username.ejs");
+
+
+  } else res.render("login.ejs");
+ 
+}); 
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
