@@ -9,9 +9,9 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/book/deletebook" method="post">
-        <label for="bookid">Book ID:</label> 
-        <input type="text" id="bookid" name="bookid" required> 
+        <form action="/user/deleteuser" method="post">
+        <label for="userid">User ID:</label> 
+        <input type="text" id="userid" name="userid" required> 
         <button type="submit">Delete</button>
 
         </form>    
@@ -20,10 +20,10 @@
             </br>Details:</br>
             <ul>    
             <li>ID : <%= locals.details.id %></li>
-            <li>Bookname: <%=locals.details.bookname%></li>
-            <li>Author: <%=locals.details.author%></li>
-            <li>Category: <%=locals.details.category%></li>
-            <li>ISBN: <%=locals.details.isbn%></li>
+            <li>Name: <%=locals.details.name%></li>
+            <li>Address: <%=locals.details.address%></li>
+            <li>Phone: <%=locals.details.phone%></li>
+            <li>Email: <%=locals.details.email%></li>
             </ul>
             <%}%>
 

@@ -76,10 +76,9 @@ app.post("/book/addbook", async (req, res) => {
             RETURNING *;`
     );
 
-    let b_id = result.rows[0].b_id;
-    if (b_id !== null) {
+    if (result.rows.length > 0) {
       message = `The book is successfully added to library database`;
-      details.id = b_id;
+      details.id = result.rows[0].b_id;
       details.name = result.rows[0].b_name;
       details.author = result.rows[0].b_author;
       details.category = result.rows[0].b_category;
@@ -112,10 +111,9 @@ app.post("/book/deletebook", async (req, res) => {
         result = await db.query(
           `DELETE FROM Books WHERE b_id = ${bookid} RETURNING *;`
         );
-        let b_id = result.rows[0].b_id;
-        if (b_id !== null) {
+        if (result.rows.length>0) {
           message = `The book is successfully deleted from library database`;
-          details.id = b_id;
+          details.id = result.rows[0].b_id;
           details.bookname = result.rows[0].b_bookname;
           details.author = result.rows[0].b_author;
           details.author = result.rows[0].b_author;
@@ -152,10 +150,9 @@ app.post("/user/adduser", async (req, res) => {
             RETURNING *;`
     );
 
-    let u_id = result.rows[0].u_id;
-    if (u_id !== null) {
+    if (result.rows.length > 0) {
       message = `The user is successfully registered`;
-      details.id = u_id;
+      details.id = result.rows[0].u_id;
       details.name = result.rows[0].u_name;
       details.address = result.rows[0].u_address;
       details.phone = result.rows[0].u_phone;
@@ -165,6 +162,43 @@ app.post("/user/adduser", async (req, res) => {
     res.render("user/adduser.ejs", { message: message, details: details });
   } else res.render("login.ejs");
 });
+
+//get deleteuser
+app.get("/user/deleteuser", (req, res) => {
+    if (req.session.authenticated) {
+      res.render("user/deleteuser.ejs");
+    } else res.render("login.ejs");
+  });
+  
+
+//post deleteuser
+app.post("/user/deleteuser", async (req, res) => {
+    if (req.session.authenticated) {
+      const userid = req.body.userid;
+      let message = `Cannot delete user from library database`;
+      let details = {};
+        //check if book exist
+        let result = await db.query(
+          `SELECT * FROM Users WHERE u_id = ${userid} ;`
+        );
+        if (result.rows.length > 0) {
+          //delete
+          result = await db.query(
+            `DELETE FROM Users WHERE u_id = ${userid} RETURNING *;`
+          );
+          if (result.rows.length > 0) {
+            details.id = result.rows[0].u_id;
+            details.name = result.rows[0].u_name;
+            details.address = result.rows[0].u_address;
+            details.email = result.rows[0].u_email;
+            details.phone = result.rows[0].u_phone;
+          }
+        } else {
+          message = `The user does not exist in the library database`;
+        }
+      res.render("user/deleteuser.ejs", { message: message, details: details });
+    } else res.render("login.ejs");
+  });
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
