@@ -30,7 +30,14 @@ app.use(
 );
 
 // Routes
-//login
+//get login sama dengan /
+app.get("/login", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("index.ejs");
+  } else res.render("login.ejs");
+});
+
+// post login
 app.post("/login", async (req, res) => {
   const password = req.body.password;
   const username = req.body.username;
