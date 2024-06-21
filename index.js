@@ -68,39 +68,76 @@ app.get('/book/addbook', (req, res) => {
     res.render ("login.ejs");
 });
 
-
-//ini belum pake postgres
+//post addbook
 app.post('/book/addbook', async (req, res) => {
-    const bookname = req.body.bookname;
-    const author = req.body.author;
-    const category = req.body.category;
-    let  message = `${bookname} cannot be added to library database`;
-    let details ={};
+    if (req.session.authenticated){
+        const bookname = req.body.bookname;
+        const author = req.body.author;
+        const category = req.body.category;
+        let  message = `The book cannot be added to library database`;
+        let details ={};
+        
+        const result = await db.query(
+            `INSERT INTO Books (b_name, b_author, b_category, is_borrowed_status)
+            VALUES ('${bookname}', '${author}', '${category}', false)
+            RETURNING b_id;`
+          );
     
-    const result = await db.query(
-        `INSERT INTO Books (b_name, b_author, b_category, is_borrowed_status)
-        VALUES ('${bookname}', '${author}', '${category}', false)
-        RETURNING b_id;`
-      );
+        let b_id = result.rows[0].b_id;
+        if (b_id!==null)
+        {
+            message = `The book is successfully added to library database`;
+            details.id = b_id;
+            details.bookname = bookname;
+            details.author = author;
+            details.category=category; 
+        
+        }    
+            
+        res.render("book/addbook.ejs",{message: message, details:details});    
+    }
+    else
+    res.render ("login.ejs");
 
-    let b_id = result.rows[0].b_id;
-    if (b_id!==null)
-    {
-        message = `${bookname} is successfully added to library database`;
-        details.id = b_id;
-        details.bookname = bookname;
-        details.author = author;
-        details.category=category; 
-    
-    }    
-    
-    
-    res.render("book/addbook.ejs",{message: message, details:details});
 });
 
+//get deletebook
+app.get('/book/deletebook', (req, res) => {
+    if (req.session.authenticated) {
+        res.render("book/deletebook.ejs");
+    }
+    else
+    res.render ("login.ejs");
+});
 
-//post addbook
+//post deletebook
+app.post('/book/deletebook', async (req, res) => {
+    if (req.session.authenticated){
+        const bookid = req.body.bookid;
+        let  message = `The book cannot be deleted from library database`;
+        let details ={};
+        
+        const result = await db.query(
+            `DELETE FROM Books WHERE b_id = ${bookid} RETURNING *;`
+          );
+    
+        let b_id = result.rows[0].b_id;
+        if (b_id!==null)
+        {
+            message = `The book is successfully deleted from library database`;
+            details.id = b_id;
+            details.bookname = result.rows[0].b_bookname;
+            details.author = result.rows[0].b_author;
+            details.category = result.rows[0].b_category;
+        
+        }    
+            
+        res.render("book/deletebook.ejs",{message: message, details:details});    
+    }
+    else
+    res.render ("login.ejs");
 
+});
 
 
 
