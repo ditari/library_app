@@ -11,25 +11,29 @@
     <div class="container-fluid">
         <form action="/user/adduser" method="post">
         <label for="name">Name:</label> 
-        <input type="text" id="bookname" name="bookname" required> 
+        <input type="text" id="name" name="name" required> 
         <br>
-        <label for="name">Author:</label> 
-        <input type="text" id="author" name="author" required> 
+        <label for="address">Address:</label> 
+        <input type="text" id="address" name="address" required> 
         <br>
-        <label for="name">Category:</label> 
-        <input type="text" id="category" name="category" required> 
+        <label for="phone">Phone:</label> 
+        <input type="text" id="phone" name="phone" required> 
+        <br>
+        <label for="email">Email:</label> 
+        <input type="text" id="email" name="email" required> 
         <br>
         <button type="submit">Add</button>
 
         </form>    
         <%=locals.message%>
             <% if (locals.details && locals.details.id) { %>
-            </br>Details</br>
+            </br>Details: </br>
             <ul>    
             <li>ID : <%= locals.details.id %></li>
-            <li>Bookname: <%=locals.details.bookname%></li>
-            <li>Author: <%=locals.details.author%></li>
-            <li>Category: <%=locals.details.category%></li>
+            <li>Name: <%=locals.details.name%></li>
+            <li>Address: <%=locals.details.address%></li>
+            <li>Phone: <%=locals.details.phone%></li>
+            <li>Email: <%=locals.details.email%></li>
             </ul>
             <%}%>
 

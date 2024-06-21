@@ -132,9 +132,7 @@ app.post('/book/deletebook', async (req, res) => {
             details.author = result.rows[0].b_author;
             details.category = result.rows[0].b_category;
             details.isbn=result.rows[0].isbn; 
-        
-        }    
-            
+        }                
         res.render("book/deletebook.ejs",{message: message, details:details});    
     }
     else
@@ -142,6 +140,49 @@ app.post('/book/deletebook', async (req, res) => {
 
 });
 
+//get adduser
+app.get('/user/adduser', (req, res) => {
+    if (req.session.authenticated) {
+        res.render("user/adduser.ejs");
+    }
+    else
+    res.render ("login.ejs");
+});
+
+//post adduser
+app.post('/user/adduser', async (req, res) => {
+    if (req.session.authenticated){
+        const name = req.body.name;
+        const address = req.body.address;
+        const phone = req.body.phone;
+        const email = req.body.email;
+        let  message = `The user cannot be registered`;
+        let details ={};
+        
+        const result = await db.query(
+            `INSERT INTO Users (u_name, u_address, u_email, u_phone, is_borrowed_status)
+            VALUES ('${name}', '${address}', '${email}','${phone}', false)
+            RETURNING *;`
+          );
+    
+        let u_id = result.rows[0].u_id;
+        if (u_id!==null)
+        {
+            message = `The user is successfully registered`;
+            details.id = u_id;
+            details.name = result.rows[0].u_name;
+            details.address = result.rows[0].u_address;
+            details.phone = result.rows[0].u_phone;
+            details.email=result.rows[0].u_email; 
+        
+        }    
+            
+        res.render("user/adduser.ejs",{message: message, details:details});    
+    }
+    else
+    res.render ("login.ejs");
+
+});
 
 
 app.listen(PORT, () => {
