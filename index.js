@@ -245,7 +245,7 @@ app.post('/check-username', async (req, res) => {
   }
 });
 
-//get change username
+//get change admin username
 app.get("/admin/username", (req, res) => {
   if (req.session.authenticated) {
     res.render("admin/username.ejs");
@@ -253,7 +253,7 @@ app.get("/admin/username", (req, res) => {
  
 }); 
 
-//post change username, belum dibuat
+//post change admin username
 app.post("/admin/username", async (req, res) => {
   if (req.session.authenticated) {
   {
@@ -263,16 +263,65 @@ app.post("/admin/username", async (req, res) => {
       `UPDATE Admin SET a_username = '${username}' where a_id = ${admin_id} returning *;`
     );
     if (result.rows.length>0)
-      message = "Username changed succesfully"; 
-    res.render("admin/username.ejs", {message:message, newusername:username});
-
+    {
+      message = "Admin username succesfully changed"; 
+      res.render("admin/username.ejs", {message:message, newusername:username});
+  
+    }     
+    else
+     res.render("admin/username.ejs", {message:message});
   }  
-    //res.render("admin/username.ejs");
-
 
   } else res.render("login.ejs");
  
 }); 
+
+//get change admin password
+app.get("/admin/password", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("admin/password.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//post change admin password
+app.post("/admin/password", async (req, res) => {
+  if (req.session.authenticated) 
+  {
+    let message = "The old password is incorrect";
+    try{    
+      const oldpassword = req.body.oldpassword;
+      const newpassword = req.body.newpassword;
+      let result = await db.query(
+        `SELECT a_password FROM Admin where a_id = ${admin_id}`
+      );
+      const db_pass = result.rows[0].a_password;
+    
+      const match = await bcrypt.compare(oldpassword, db_pass);
+      if (match) 
+      {
+        message = "The password cannot be changed";
+        const hashedPassword = await bcrypt.hash(newpassword, 10);
+  
+        result = await db.query(
+          `UPDATE Admin SET a_password = '${hashedPassword}' where a_id = ${admin_id} returning *;`
+        );
+        if (result.rows.length>0){
+          message = "The password successfully changed";
+        }
+      }
+    }
+    catch (err){console.log(err);}
+
+    res.render("admin/password.ejs",{message:message});
+  }   
+  else res.render("login.ejs");
+
+}); 
+
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
