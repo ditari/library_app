@@ -6,6 +6,7 @@ import pg from "pg";
 
 const app = express();
 const PORT = 3000;
+let admin_id="";
 
 const db = new pg.Client({
   user: "postgres",
@@ -33,17 +34,34 @@ app.use(
 app.post("/login", async (req, res) => {
   const password = req.body.password;
   const username = req.body.username;
+  let message = "Incorrect username/password";
+  try{
 
-  const result = await db.query(
-    `SELECT a_password FROM Admin where a_username = '${username}'`
-  );
-  // const pass = result.rows[0];
-  const db_pass = result.rows[0].a_password;
+    const result = await db.query(
+      `SELECT a_password FROM Admin where a_username = '${username}'`
+    );
+    const db_pass = result.rows[0].a_password;
+  
+    const match = await bcrypt.compare(password, db_pass);
+    if (match) 
+    {
+      req.session.authenticated = true;
+      const result = await db.query(
+        `SELECT a_id FROM Admin where a_username = '${username}'`
+      );
+      admin_id=result.rows[0].a_id;
+      res.render("index.ejs");
+    }
+    else 
+    {
+      //message = "Incorrect password";
+      res.render("login.ejs", { message: message});
+    }
+  }
+  catch(err){
+    res.render("login.ejs", { message: message});
+  }
 
-  const match = await bcrypt.compare(password, db_pass);
-  if (match) req.session.authenticated = true;
-
-  return res.redirect("/");
 });
 
 //index
@@ -199,6 +217,14 @@ app.post("/user/deleteuser", async (req, res) => {
       res.render("user/deleteuser.ejs", { message: message, details: details });
     } else res.render("login.ejs");
   });
+
+ //logout admin
+ app.get("/logout", (req, res) => {
+  req.session.authenticated = false;
+  admin_id = "";
+  res.redirect("/");
+}); 
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
