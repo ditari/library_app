@@ -74,19 +74,28 @@ app.post('/book/addbook', async (req, res) => {
     const bookname = req.body.bookname;
     const author = req.body.author;
     const category = req.body.category;
-    let message = `${bookname} cannot be added to library database`;
-
+    let  message = `${bookname} cannot be added to library database`;
+    let details ={};
+    
     const result = await db.query(
         `INSERT INTO Books (b_name, b_author, b_category, is_borrowed_status)
         VALUES ('${bookname}', '${author}', '${category}', false)
         RETURNING b_id;`
       );
 
-    console.log(result.rows[0].b_id);
+    let b_id = result.rows[0].b_id;
+    if (b_id!==null)
+    {
+        message = `${bookname} is successfully added to library database`;
+        details.id = b_id;
+        details.bookname = bookname;
+        details.author = author;
+        details.category=category; 
     
-    message = `${bookname} is successfully added to library database`;    
+    }    
     
-    res.render("book/addbook.ejs",{message: message});
+    
+    res.render("book/addbook.ejs",{message: message, details:details});
 });
 
 
