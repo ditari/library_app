@@ -141,7 +141,6 @@ app.post("/book/deletebook", async (req, res) => {
           details.id = result.rows[0].b_id;
           details.bookname = result.rows[0].b_bookname;
           details.author = result.rows[0].b_author;
-          details.author = result.rows[0].b_author;
           details.category = result.rows[0].b_category;
           details.isbn = result.rows[0].isbn;
         }
@@ -318,8 +317,79 @@ app.post("/admin/password", async (req, res) => {
 
 }); 
 
+//get editbook 
+app.get("/book/editbook", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("book/editbook.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//check book availability
+app.post('/book/check-bookid', async (req, res) => {
+  if (req.session.authenticated) {
+    const bookid = req.body.bookid;
+    let message = "This book is not available";
+  
+      let result = await db.query(
+        `SELECT * FROM Books where b_id = ${bookid};`
+      );
+      if (result.rows.length > 0) {
+        message ="This book is available";
+        let name = result.rows[0].b_name;
+        let author = result.rows[0].b_author;
+        let category = result.rows[0].b_category;
+        let isbn = result.rows[0].isbn;
+        res.render("book/editbook.ejs",{message:message,name:name,author:author,
+          category:category,isbn:isbn,bookid:bookid});
+          
+      }  
+      else{
+        res.render("book/editbook.ejs",{message:message, bookid:bookid});
+      }
+  } 
+  else res.render("login.ejs");
+});
+
+app.post('/book/editbook', async (req, res) => {
+  if (req.session.authenticated) {
+    const newbookid = req.body.newbookid;
+
+    if (newbookid.length > 0){
+      const newname = req.body.newname;
+      const newauthor = req.body.newauthor;
+      const newcategory = req.body.newcategory;
+      const newisbn = req.body.newisbn;
+  
+      let message2 = "Cannot update book";
+      let details = {};
+  
+        let result = await db.query(
+          `   UPDATE Books 
+              SET b_name = '${newname}', b_author = '${newauthor}', b_category = '${newcategory}' , isbn = '${newisbn}' 
+              WHERE b_id = ${newbookid} returning * ;`
+        );
+        if (result.rows.length > 0) {
+          message2 = "The book successfully updated";
+          details.id = result.rows[0].b_id;
+          details.bookname = result.rows[0].b_bookname;
+          details.author = result.rows[0].b_author;
+          details.category = result.rows[0].b_category;
+          details.isbn = result.rows[0].isbn;
+          res.render("book/editbook.ejs",{message2:message2, details:details});
+        }
+        else
+        res.render("book/editbook.ejs",{message2:message2});
+  
+    }
+    else{
+      let message = "Check book availibility first";
+      res.render("book/editbook.ejs",{message:message})
+    }  
 
 
+  } 
+  else res.render("login.ejs");
+});
 
 
 
