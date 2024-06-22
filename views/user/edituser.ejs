@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Application</title>
+    <link rel="stylesheet" href="/layout.css">
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/user/check-userid" method="post">
+            <label for="userid">User ID:</label> 
+            <input type="text" id="userid" name="userid" value="<%=locals.userid%>" required> 
+            <button type="submit">Check</button>
+        </form>    
+            <div> <%=locals.message%> </div>
+
+
+        <form action="/user/edituser" method="post">
+        <input type="hidden" id="newuserid" name="newuserid" value="<%=locals.userid%>"> 
+        
+        <label for="name">Name:</label> 
+        <input type="text" id="newname" name="newname" value="<%=locals.name%>" required> 
+        <br>
+        <label for="name">Address:</label> 
+        <input type="text" id="newaddress" name="newaddress" value="<%=locals.address%>" required> 
+        <br>
+        <label for="name">Phone:</label> 
+        <input type="text" id="newphone" name="newphone" value="<%=locals.phone%>" required> 
+        <br>
+        <label for="name">Email:</label> 
+        <input type="text" id="newemail" name="newemail" value="<%=locals.email%>" required> 
+        <br>
+
+        <button type="submit">Update</button>
+
+        </form>    
+        <%=locals.message2%>
+        <% if (locals.details) { %>
+        </br>Details: </br>
+        <ul>    
+        <li>User ID : <%= locals.details.id %></li>
+        <li>Name: <%=locals.details.name%></li>
+        <li>Address: <%=locals.details.address%></li>
+        <li>Phone: <%=locals.details.phone%></li>
+        <li>Email: <%=locals.details.email%></li>
+        </ul>
+        <%}%>
+
+
+    </div>
+</body>
+</html>

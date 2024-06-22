@@ -231,8 +231,8 @@ app.post("/user/deleteuser", async (req, res) => {
   res.redirect("/");
 }); 
 
-//check if username available
-app.post('/check-username', async (req, res) => {
+//check if admin username available
+app.post('/check-admin-username', async (req, res) => {
   const username = req.body.username;
   const result = await db.query(
     `Select * FROM Admin WHERE a_username = '${username}';`
@@ -385,11 +385,86 @@ app.post('/book/editbook', async (req, res) => {
       let message = "Check book availibility first";
       res.render("book/editbook.ejs",{message:message})
     }  
-
-
   } 
   else res.render("login.ejs");
 });
+
+//get user edit
+app.get("/user/edituser", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("user/edituser.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//check user availability
+app.post('/user/check-userid', async (req, res) => {
+  if (req.session.authenticated) {
+    const userid = req.body.userid;
+    let message = "No user data is found";
+  
+      let result = await db.query(
+        `SELECT * FROM Users where u_id = ${userid};`
+      );
+      if (result.rows.length > 0) {
+        message ="User data is found";
+        
+        let name = result.rows[0].u_name;
+        let address = result.rows[0].u_address;
+        let email = result.rows[0].u_email;
+        let phone = result.rows[0].u_phone;
+
+        res.render("user/edituser.ejs",{message:message, userid:userid, 
+          name:name, address:address, email:email,phone:phone});
+          
+      }  
+      else{
+        res.render("user/edituser.ejs",{message:message, userid:userid});
+      }
+  } 
+  else res.render("login.ejs");
+});
+
+app.post('/user/edituser', async (req, res) => {
+  if (req.session.authenticated) {
+    const newuserid = req.body.newuserid;
+
+    if (newuserid.length > 0){
+      const newname = req.body.newname;
+      const newaddress = req.body.newaddress;
+      const newphone = req.body.newphone;
+      const newemail = req.body.newemail;
+  
+      let message2 = "Cannot update user data";
+      let details = {};
+  
+        let result = await db.query(
+          `   UPDATE Users 
+              SET u_name = '${newname}', u_address = '${newaddress}', u_email = '${newemail}' , u_phone = '${newphone}' 
+              WHERE u_id = ${newuserid} returning * ;`
+        );
+        if (result.rows.length > 0) {
+          message2 = "User data is successfully updated";
+          details.id = result.rows[0].u_id;
+          details.name = result.rows[0].u_name;
+          details.address = result.rows[0].u_address;
+          details.email = result.rows[0].u_email;
+          details.phone = result.rows[0].u_phone;
+
+          res.render("user/edituser.ejs",{message2:message2, details:details});
+        }
+        else
+        res.render("user/edituser.ejs",{message2:message2});
+  
+    }
+    else{
+      let message = "Check if the user data is available first";
+      res.render("user/edituser.ejs",{message:message})
+    }  
+  } 
+  else res.render("login.ejs");
+});
+
+
 
 
 
