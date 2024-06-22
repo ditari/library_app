@@ -3,17 +3,21 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import pg from "pg";
+import env from "dotenv";
+
 
 const app = express();
 const PORT = 3000;
+env.config();
+
 let admin_id="";
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "LibraryDatabase",
-  password: "root",
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT
 });
 db.connect();
 
@@ -23,7 +27,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: "your_secret_key",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
