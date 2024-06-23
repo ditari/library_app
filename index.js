@@ -646,9 +646,9 @@ function daysBetween(date1, date2) {
 
 app.post("/borrowing/payfine", async (req, res) => {
   const fineid = req.body.fineid;  
-  result = await db.query(`UPDATE Fine SET paid_status = true where f_id = ${fineid} returning *;`);  
+  let result = await db.query(`UPDATE Fine SET paid_status = true where f_id = ${fineid} returning *;`);  
   const fine =  result.rows[0].fine_amount;
-  res.render("payfine.ejs",{fine:fine});
+  res.render("borrowing/payfine.ejs",{fine:fine});
 });
 
 

@@ -26,7 +26,7 @@
         <%}%>    
         <% if (locals.finemessage) { %>
             <%=locals.finemessage%>
-            <form action="/borrowing/payfine" method="post"></form>
+            <form action="/borrowing/payfine" method="post">
             <input type="hidden" id="fineid" name="fineid" value="<%=locals.fineid%>">
             <button type="submit">Pay Fine</button> 
             </form>
@@ -34,5 +34,4 @@
         <%}%>
 
     </div>
-</body>
 </html>
