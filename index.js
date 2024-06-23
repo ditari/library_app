@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import pg from "pg";
 import env from "dotenv";
 
-
 const app = express();
 const PORT = 3000;
 env.config();
@@ -467,6 +466,81 @@ app.post('/user/edituser', async (req, res) => {
   } 
   else res.render("login.ejs");
 });
+
+//get user edit
+app.get("/borrowing/borrow", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("borrowing/borrow.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//get user edit
+app.post("/borrowing/borrow", async (req, res) => {
+  if (req.session.authenticated) {
+    const bookid = req.body.bookid;    
+    const userid = req.body.userid;
+    let message="Unable to borrow the book";
+    let issuccess = false;
+    let details = {};
+
+    //check if book available
+    let result = await db.query(
+      ` select is_borrowed_status from Books WHERE b_id = ${bookid} ;`
+    );
+    if ((result.rows.length > 0) && (result.rows[0].is_borrowed_status == false))
+     {
+      //check if user exist
+        result = await db.query(`select * from Users WHERE u_id = ${userid};`);
+        if (result.rows.length > 0)
+        {
+          result = await db.query(
+          `insert into Borrowing (b_id,a_id,u_id,borrow_date,due_date,is_borrowed_status)
+          values (${bookid},${admin_id},${userid},(NOW())::DATE, (NOW() + INTERVAL '2 weeks')::DATE, true) returning *`
+        );
+          if (result.rows.length > 0)
+          {
+            //get duedate
+            details.duedate = result.rows[0].due_date.toLocaleDateString();
+            //console.log(result.rows[0].due_date.toLocaleDateString());
+
+            let result2 = await db.query(
+                `UPDATE Users SET is_borrowed_status = TRUE where u_id = ${userid} returning *;`);
+            let result3 = await db.query(
+                  `UPDATE Books SET is_borrowed_status = TRUE where b_id = ${bookid} returning * ;`);
+
+            if ((result2.rows.length > 0) && (result3.rows.length > 0))
+            {
+              issuccess = true;
+              //get book name and author
+              result = await db.query(
+                `select * from Books where b_id = ${bookid};`);
+              
+              details.bookname = result.rows[0].b_name;
+              details.author = result.rows[0].b_author;
+
+              //get username  
+              result = await db.query(
+                `select * from Users where u_id = ${userid};`);
+              
+              details.username = result.rows[0].u_name;
+              
+              //get message
+              message = "The book "+bookid+ " is successfully borrowed by user "+userid;
+
+            }   
+            
+          }  
+
+        }  
+     } 
+if (issuccess)
+  res.render("borrowing/borrow.ejs",{message:message, details:details})
+else
+  res.render("borrowing/borrow.ejs",{message:message})
+
+
+  } else res.render("login.ejs");
+}); 
 
 
 

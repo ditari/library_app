@@ -9,21 +9,25 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/book/deletebook" method="post">
+        <form action="/borrowing/borrow" method="post">
         <label for="bookid">Book ID:</label> 
         <input type="text" id="bookid" name="bookid" required> 
-        <button type="submit">Delete</button>
+        <br>
+        <label for="userid">User ID:</label> 
+        <input type="text" id="userid" name="userid" required> 
+        <br>
+        <button type="submit">Borrow</button>
 
         </form>    
         <%=locals.message%>
-            <% if (locals.details && locals.details.id) { %>
+            <% if (locals.details) { %>
             </br>Details:</br>
             <ul>    
-            <li>Book ID : <%= locals.details.id %></li>
-            <li>Title: <%=locals.details.bookname%></li>
+            <li>Title: <%= locals.details.bookname %></li>
             <li>Author: <%=locals.details.author%></li>
-            <li>Category: <%=locals.details.category%></li>
-            <li>ISBN: <%=locals.details.isbn%></li>
+            <li>Borrowed by: <%=locals.details.username%></li>
+            <li>Due date: <%=locals.details.duedate%></li>
+
             </ul>
             <%}%>
 

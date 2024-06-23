@@ -20,7 +20,7 @@
         <form action="/book/editbook" method="post">
         <input type="hidden" id="newbookid" name="newbookid" value="<%=locals.bookid%>"> 
         
-        <label for="name">Name:</label> 
+        <label for="name">Title:</label> 
         <input type="text" id="newname" name="newname" value="<%=locals.name%>" required> 
         <br>
         <label for="name">Author:</label> 
@@ -42,7 +42,7 @@
         </br>Details:</br>
         <ul>    
         <li>Book ID : <%= locals.details.id %></li>
-        <li>Bookname: <%=locals.details.bookname%></li>
+        <li>Title: <%=locals.details.bookname%></li>
         <li>Author: <%=locals.details.author%></li>
         <li>Category: <%=locals.details.category%></li>
         <li>ISBN: <%=locals.details.isbn%></li>

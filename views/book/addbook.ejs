@@ -10,7 +10,7 @@
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
         <form action="/book/addbook" method="post">
-        <label for="name">Name:</label> 
+        <label for="name">Title:</label> 
         <input type="text" id="bookname" name="bookname" required> 
         <br>
         <label for="name">Author:</label> 
@@ -30,7 +30,7 @@
             </br>Details:</br>
             <ul>    
             <li>Book ID: <%= locals.details.id %></li>
-            <li>Bookname: <%=locals.details.name%></li>
+            <li>Title: <%=locals.details.name%></li>
             <li>Author: <%=locals.details.author%></li>
             <li>Category: <%=locals.details.category%></li>
             <li>ISBN: <%=locals.details.isbn%></li>
