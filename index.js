@@ -8,6 +8,7 @@ import env from "dotenv";
 const app = express();
 const PORT = 3000;
 env.config();
+const fine_amount = 100;
 
 let admin_id="";
 
@@ -467,14 +468,14 @@ app.post('/user/edituser', async (req, res) => {
   else res.render("login.ejs");
 });
 
-//get user edit
+//get borrow
 app.get("/borrowing/borrow", (req, res) => {
   if (req.session.authenticated) {
     res.render("borrowing/borrow.ejs");
   } else res.render("login.ejs");
 }); 
 
-//get user edit
+//post borrow
 app.post("/borrowing/borrow", async (req, res) => {
   if (req.session.authenticated) {
     const bookid = req.body.bookid;    
@@ -542,8 +543,113 @@ else
   } else res.render("login.ejs");
 }); 
 
+//get return book
+app.get("/borrowing/return", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("borrowing/return.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//post return book
+app.post("/borrowing/return", async (req, res) => {
+  if (req.session.authenticated) {
+    const bookid = req.body.bookid;  
+    let message = "";
+    let details = {};
+    let is_late= false;
+    let finemessage = "";
+    let fineid="";
+
+    //check if book is borrowed
+    let result = await db.query(
+      `Select * from Borrowing where b_id = ${bookid} and is_borrowed_status = true ;`);
+    if (result.rows.length > 0)
+    {
+      //update table borrowing
+      let borrow_id = result.rows[0].borrow_id;
+      let user_id = result.rows[0].u_id;
+      result = await db.query(`UPDATE Borrowing SET is_borrowed_status = false, return_date = (NOW())::DATE
+         where borrow_id = ${borrow_id} returning *;`);
+
+      details.returndate = result.rows[0].return_date.toLocaleDateString();
+      
+      //check fine
+      let due_date = new Date(result.rows[0].due_date);
+      let return_date = new Date(result.rows[0].return_date);
+      if (return_date > due_date)
+      {
+        is_late=true;
+        let diff = daysBetween(due_date,return_date);
+        let fine = fine_amount*diff;
+        finemessage = "The book is "+diff+ " day(s) late. The fine amount is "+ fine;
+        
+        //insert into fine 
+        result = await db.query(`insert into Fine (b_id, u_id, a_id, fine_amount, paid_status)
+        values (${bookid}, ${user_id}, ${admin_id}, ${fine}, false)
+        returning f_id;`);
+        fineid = result.rows[0].f_id;
+      }          
+
+      //update table book
+      result = await db.query(`UPDATE Books SET is_borrowed_status = false
+        where b_id = ${bookid} returning *;`);
+
+      details.bookname = result.rows[0].b_name;
+      details.author = result.rows[0].b_author;
+         
+      //check if user still borrows  
+      result = await db.query(`select * from Borrowing where u_id = ${user_id} and is_borrowed_status=true;`);
+      if (result.rows.length == 0)
+      {
+        result = await db.query(`UPDATE Users SET is_borrowed_status = false
+          where u_id = ${user_id} returning *;`);
+          
+      }  
+
+      //select user
+      result = await db.query(`select * from Users where u_id = ${user_id};`);  
+      details.username = result.rows[0].u_name;
 
 
+      //message
+      message = "The book is successfully returned";
+
+      if (is_late)
+        res.render("borrowing/return.ejs",{message:message, finemessage:finemessage, fineid:fineid, details:details})
+      else
+        res.render("borrowing/return.ejs",{message:message,details:details})
+    }  
+    else
+    {
+      message = "Unable to return the book"
+      res.render("borrowing/return.ejs",{message:message});
+
+    }
+
+  } else res.render("login.ejs");
+}); 
+
+function daysBetween(date1, date2) {
+  // Convert to Date objects
+  const d1 = new Date(date1);
+  const d2 = new Date(date2);
+
+  // Calculate the time difference in milliseconds
+  const timeDifference = Math.abs(d2 - d1);
+
+  // Convert the time difference from milliseconds to days
+  const millisecondsPerDay = 24 * 60 * 60 * 1000; // Hours * Minutes * Seconds * Milliseconds
+  const dayDifference = Math.ceil(timeDifference / millisecondsPerDay);
+
+  return dayDifference;
+}
+
+app.post("/borrowing/payfine", async (req, res) => {
+  const fineid = req.body.fineid;  
+  result = await db.query(`UPDATE Fine SET paid_status = true where f_id = ${fineid} returning *;`);  
+  const fine =  result.rows[0].fine_amount;
+  res.render("payfine.ejs",{fine:fine});
+});
 
 
 app.listen(PORT, () => {

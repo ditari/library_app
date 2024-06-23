@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Application</title>
+    <link rel="stylesheet" href="/layout.css">
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/borrowing/return" method="post">
+        <label for="bookid">Book ID:</label> 
+        <input type="text" id="bookid" name="bookid" required> 
+        <button type="submit">Return</button>
+
+        </form>    
+        <%=locals.message%>
+        <% if (locals.details) { %>
+        </br>Details:</br>
+        <ul>    
+        <li>Title: <%= locals.details.bookname %></li>
+        <li>Author: <%=locals.details.author%></li>
+        <li>Borrowed by: <%=locals.details.username%></li>
+        <li>Return date: <%=locals.details.returndate%></li>
+        <%}%>    
+        <% if (locals.finemessage) { %>
+            <%=locals.finemessage%>
+            <form action="/borrowing/payfine" method="post"></form>
+            <input type="hidden" id="fineid" name="fineid" value="<%=locals.fineid%>">
+            <button type="submit">Pay Fine</button> 
+            </form>
+
+        <%}%>
+
+    </div>
+</body>
+</html>
