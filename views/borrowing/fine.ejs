@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Application</title>
+    <link rel="stylesheet" href="/layout.css">
+
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/borrowing/fine" method="post">
+            Search fine by:
+            <select id="dropdown" name="choice" onchange="showInputField()">
+                <option value=""></option>
+                <option value="1">User ID</option>
+                <option value="2">Unpaid fine</option>
+                <option value="3">All</option>
+            </select>
+            <br>
+            <div id="inputContainer" class="row"></div>
+
+            <button id="searchbutton" type="submit" hidden>Submit</button>
+        </form>
+    
+    </div>
+
+    
+    <script>
+        function showInputField() {
+            const dropdown = document.getElementById('dropdown');
+            const inputContainer = document.getElementById('inputContainer');
+            inputContainer.innerHTML = ''; // Clear any existing content
+
+            if (dropdown.value==1) {
+                let label = document.createElement('label'); // Create label element
+                label.innerText = "User ID";
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'userid';
+                input.name = 'userid';
+
+                const inputDiv1 = document.createElement('div');
+                inputDiv1.className = 'col';
+                inputDiv1.appendChild(label);
+
+                const inputDiv2 = document.createElement('div');
+                inputDiv2.className = 'col';
+                inputDiv2.appendChild(input);
+
+                inputContainer.appendChild(inputDiv1);
+                inputContainer.appendChild(inputDiv2);
+            }
+
+            if (dropdown.value){
+                document.getElementById("searchbutton").removeAttribute("hidden");
+            } else {
+                document.getElementById("searchbutton").setAttribute("hidden", "hidden");
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>

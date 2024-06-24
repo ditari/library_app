@@ -689,22 +689,17 @@ app.post("/book/searchbook", async (req, res) => {
     if (result.rows.length > 0)
     {
       isbookexist = true;
-     // console.log(result);
-      
-      result.rows.forEach(obj => {
-        // Iterate through each property of the object
-          console.log(obj.b_id);
-          console.log(obj.b_name);
-
-      });
-
     }  
-    console.log(isbookexist);
-
     res.render("book/searchbook.ejs",{isbookexist:isbookexist, result:result});
   } else res.render("login.ejs");
 }); 
 
+
+app.get("/borrowing/fine", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("borrowing/fine.ejs");
+  } else res.render("login.ejs");
+}); 
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
