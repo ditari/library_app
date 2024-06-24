@@ -643,13 +643,67 @@ function daysBetween(date1, date2) {
 
   return dayDifference;
 }
-
+//payfine
 app.post("/borrowing/payfine", async (req, res) => {
-  const fineid = req.body.fineid;  
+  if (req.session.authenticated) {
+      const fineid = req.body.fineid;  
   let result = await db.query(`UPDATE Fine SET paid_status = true where f_id = ${fineid} returning *;`);  
   const fine =  result.rows[0].fine_amount;
-  res.render("borrowing/payfine.ejs",{fine:fine});
+  res.render("borrowing/payfine.ejs",{fine:fine});}
+  else res.render("login.ejs");  
 });
+
+//get searchbook
+app.get("/book/searchbook", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("book/searchbook.ejs");
+  } else res.render("login.ejs");
+}); 
+
+app.post("/book/searchbook", async (req, res) => {
+  if (req.session.authenticated) {
+    let isbookexist = false;
+    let choice =  req.body.choice;
+    let inputvalue = req.body.inputvalue;
+    let result = {};
+
+    switch (choice) {
+      case '1':
+        result = await db.query(`select * from Books where b_id = ${inputvalue} and is_borrowed_status = false ;`);
+        break;
+      case '2':
+        result = await db.query(`select * from Books where b_name = '${inputvalue}' and is_borrowed_status = false ;`);  
+        break;
+      case '3':
+        result = await db.query(`select * from Books where b_author = '${inputvalue}' and is_borrowed_status = false ;`);  
+        break;
+      case '4':
+        result = await db.query(`select * from Books where b_category = '${inputvalue}' and is_borrowed_status = false ;`);
+        break;
+      case '5':
+        result = await db.query(`select * from Books where ISBN = '${inputvalue}' and is_borrowed_status = false ;`);  
+        break;
+    }
+
+
+    if (result.rows.length > 0)
+    {
+      isbookexist = true;
+     // console.log(result);
+      
+      result.rows.forEach(obj => {
+        // Iterate through each property of the object
+          console.log(obj.b_id);
+          console.log(obj.b_name);
+
+      });
+
+    }  
+    console.log(isbookexist);
+
+    res.render("book/searchbook.ejs",{isbookexist:isbookexist, result:result});
+  } else res.render("login.ejs");
+}); 
 
 
 app.listen(PORT, () => {

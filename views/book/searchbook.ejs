@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Application</title>
+    <link rel="stylesheet" href="/layout.css">
+
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/book/searchbook" method="post">
+            Search book by:
+            <select id="dropdown" name="choice" onchange="showInputField()">
+                <option value=""></option>
+                <option value="1">Book ID</option>
+                <option value="2">Title</option>
+                <option value="3">Author</option>
+                <option value="4">Category</option>
+                <option value="5">ISBN</option>
+            </select>
+            <br>
+            <div id="inputContainer" class="row"></div>
+
+            <button id="searchbutton" type="submit" hidden>Submit</button>
+        </form>
+        <% if (locals.isbookexist) { %>
+            <div>
+            <tr>
+                <td>Book ID |</td>
+                <td>Title |</td>
+                <td>Author |</td>
+                <td>Category |</td>
+                <td>ISBN</td>
+            </tr>
+        
+            <% result.rows.forEach(obj => { %>
+                <br>
+                <tr>    
+                    <td><%= obj.b_id %></td>
+                    <td><%= obj.b_name %></td>
+                    <td><%= obj.b_author %></td>
+                    <td><%= obj.b_category %></td>
+                    <td><%= obj.ISBN %></td>
+                </tr>    
+            <% }); %>
+            </div>     
+        <% } %>
+    
+    </div>
+
+    
+    <script>
+        function showInputField() {
+            const dropdown = document.getElementById('dropdown');
+            const inputContainer = document.getElementById('inputContainer');
+            inputContainer.innerHTML = ''; // Clear any existing content
+
+            if (dropdown.value) {
+                let label = document.createElement('label'); // Create label element
+                switch (dropdown.value) {
+                    case '1':
+                        label.innerText = "Book ID";
+                        break;
+                    case '2':
+                        label.innerText = "Title";
+                        break;
+                    case '3':
+                        label.innerText = "Author";
+                        break;
+                    case '4':
+                        label.innerText = "Category";
+                        break;
+                    case '5':
+                        label.innerText = "ISBN";
+                        break;
+                }
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'inputvalue';
+                input.name = 'inputvalue';
+
+                const inputDiv1 = document.createElement('div');
+                inputDiv1.className = 'col';
+                inputDiv1.appendChild(label);
+
+                const inputDiv2 = document.createElement('div');
+                inputDiv2.className = 'col';
+                inputDiv2.appendChild(input);
+
+                inputContainer.appendChild(inputDiv1);
+                inputContainer.appendChild(inputDiv2);
+
+                document.getElementById("searchbutton").removeAttribute("hidden");
+            } else {
+                document.getElementById("searchbutton").setAttribute("hidden", "hidden");
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
