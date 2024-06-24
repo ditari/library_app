@@ -26,28 +26,30 @@
             <button id="searchbutton" type="submit" hidden>Submit</button>
         </form>
         <% if (locals.isbookexist) { %>
-            <div>
-            <tr>
-                <td>Book ID |</td>
-                <td>Title |</td>
-                <td>Author |</td>
-                <td>Category |</td>
-                <td>ISBN</td>
-            </tr>
-        
-            <% result.rows.forEach(obj => { %>
-                <br>
-                <tr>    
-                    <td><%= obj.b_id %></td>
-                    <td><%= obj.b_name %></td>
-                    <td><%= obj.b_author %></td>
-                    <td><%= obj.b_category %></td>
-                    <td><%= obj.ISBN %></td>
-                </tr>    
-            <% }); %>
-            </div>     
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>ISBN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% result.rows.forEach(obj => { %>
+                        <tr>    
+                            <td><%= obj.b_id %></td>
+                            <td><%= obj.b_name %></td>
+                            <td><%= obj.b_author %></td>
+                            <td><%= obj.b_category %></td>
+                            <td><%= obj.ISBN %></td>
+                        </tr>    
+                    <% }); %>
+                </tbody>
+            </table>     
         <% } %>
-    
+        <%= locals.message %>    
     </div>
 
     

@@ -24,6 +24,30 @@
             <button id="searchbutton" type="submit" hidden>Submit</button>
         </form>
     
+        <% if (locals.isfineexist) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Book</th>
+                        <th>Fine Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% result.rows.forEach(obj => { %>
+                        <tr>    
+                            <td><%= obj.uname %></td>
+                            <td><%= obj.bname %></td>
+                            <td><%= obj.amount %></td>
+                            <td><%= obj.status %></td>
+                        </tr>    
+                    <% }); %>
+                </tbody>
+            </table>     
+        <% } %>
+        <%= locals.message %>    
+
     </div>
 
     

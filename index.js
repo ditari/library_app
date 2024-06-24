@@ -689,8 +689,14 @@ app.post("/book/searchbook", async (req, res) => {
     if (result.rows.length > 0)
     {
       isbookexist = true;
+      res.render("book/searchbook.ejs",{isbookexist:isbookexist, result:result});
+
     }  
-    res.render("book/searchbook.ejs",{isbookexist:isbookexist, result:result});
+    else
+    {
+      let message = "This book is not available";
+      res.render("book/searchbook.ejs",{isbookexist:isbookexist, result:result, message:message});
+    }
   } else res.render("login.ejs");
 }); 
 
@@ -700,6 +706,57 @@ app.get("/borrowing/fine", (req, res) => {
     res.render("borrowing/fine.ejs");
   } else res.render("login.ejs");
 }); 
+
+
+app.post("/borrowing/fine", async (req, res) => {
+  if (req.session.authenticated) {
+    let isfineexist = false;
+    let choice =  req.body.choice;
+    let result = {};
+    if (choice==='1')
+    {
+      let userid =  req.body.userid;
+      result = await db.query(`
+          select Fine.u_id as uid , Users.u_name as uname, Fine.b_id as bid, Books.b_name as bname, Fine.fine_amount as amount, Fine.paid_status as status
+        from Fine inner join Users
+        on Users.u_id = Fine.u_id
+        inner join Books
+        on Books.b_id = Fine.b_id where Fine.u_id= ${userid};`);  
+    }
+    else if (choice==='2')
+    {
+      result = await db.query(`
+        select Fine.u_id as uid , Users.u_name as uname, Fine.b_id as bid, Books.b_name as bname, Fine.fine_amount as amount, Fine.paid_status as status
+        from Fine inner join Users
+        on Users.u_id = Fine.u_id
+        inner join Books
+        on Books.b_id = Fine.b_id where Fine.paid_status= false;`);  
+    }
+    else if (choice==='3')
+      {
+        result = await db.query(`
+          select Fine.u_id as uid , Users.u_name as uname, Fine.b_id as bid, Books.b_name as bname, Fine.fine_amount as amount, Fine.paid_status as status
+          from Fine inner join Users
+          on Users.u_id = Fine.u_id
+          inner join Books
+          on Books.b_id = Fine.b_id;`);  
+      }
+    
+    if (result.rows.length >0){
+      isfineexist = true; 
+      res.render("borrowing/fine.ejs",{result:result, isfineexist:isfineexist});
+      console.log(result);
+    }
+    else{
+      let message = "No fines available";
+      res.render("borrowing/fine.ejs",{message:message, isfineexist:isfineexist});
+
+    }
+
+  } else res.render("login.ejs");
+}); 
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
