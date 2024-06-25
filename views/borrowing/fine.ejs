@@ -21,9 +21,10 @@
             <br>
             <div id="inputContainer" class="row"></div>
 
-            <button id="searchbutton" type="submit" hidden>Submit</button>
+            <button id="searchbutton" type="submit" hidden>Search</button>
         </form>
     
+        <div id ="searchresult">
         <% if (locals.isfineexist) { %>
             <table>
                 <thead>
@@ -47,7 +48,7 @@
             </table>     
         <% } %>
         <%= locals.message %>    
-
+        </div>    
     </div>
 
     
@@ -55,7 +56,10 @@
         function showInputField() {
             const dropdown = document.getElementById('dropdown');
             const inputContainer = document.getElementById('inputContainer');
+            const sr = document.getElementById('searchresult');
+            
             inputContainer.innerHTML = ''; // Clear any existing content
+            sr.innerHTML='';
 
             if (dropdown.value==1) {
                 let label = document.createElement('label'); // Create label element

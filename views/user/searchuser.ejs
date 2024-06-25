@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Application</title>
+    <link rel="stylesheet" href="/layout.css">
+</head>
+<body>
+    <%- include('../partials/header.ejs') %>
+    <div class="container-fluid">
+        <form action="/user/searchuser" method="post">
+        <label for="userid">User ID:</label> 
+        <input type="text" id="userid" name="userid" required> 
+        <button type="submit">Search</button>
+
+        </form>    
+        <%=locals.message%>
+            <% if (locals.details) { %>
+            </br>Details:</br>
+            <ul>    
+            <li>User ID : <%= locals.details.id %></li>
+            <li>Name: <%=locals.details.name%></li>
+            <li>Address: <%=locals.details.address%></li>
+            <li>Phone: <%=locals.details.phone%></li>
+            <li>Email: <%=locals.details.email%></li>
+            </ul>
+            <%}%>
+
+            <% if (locals.message1) { %>
+                <%=locals.message1%>
+                <% result.rows.forEach(obj => { %>
+                <table>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>ISBN</th>
+                    </tr>
+                    <tr>    
+                        <td><%= obj.b_id %></td>
+                        <td><%= obj.b_name %></td>
+                        <td><%= obj.b_author %></td>
+                        <td><%= obj.b_category %></td>
+                        <td><%= obj.ISBN %></td>
+                    </tr>
+                </table>    
+                <% }); %>
+            <%}%>    
+        
+            <% if (locals.message2) { %>
+                <%=locals.message2%>
+                <table>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Fine Amount</th>
+                        <th>Paid Status</th>
+                    </tr>
+
+                <% result2.rows.forEach(obj => { %>
+                    <tr>    
+                        <td><%= obj.b_name %></td>
+                        <td><%= obj.fine_amount %></td>
+                        <td><%= obj.paid_status %></td>
+                    </tr>
+                <% }); %>
+                </table>    
+
+            <%}%>    
+  
+    </div>
+</body>
+</html>

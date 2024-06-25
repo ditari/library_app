@@ -745,7 +745,7 @@ app.post("/borrowing/fine", async (req, res) => {
     if (result.rows.length >0){
       isfineexist = true; 
       res.render("borrowing/fine.ejs",{result:result, isfineexist:isfineexist});
-      console.log(result);
+      //console.log(result);
     }
     else{
       let message = "No fines available";
@@ -756,6 +756,64 @@ app.post("/borrowing/fine", async (req, res) => {
   } else res.render("login.ejs");
 }); 
 
+//get searchuser
+app.get("/user/searchuser", (req, res) => {
+  if (req.session.authenticated) {
+    res.render("user/searchuser.ejs");
+  } else res.render("login.ejs");
+}); 
+
+//post searchuser
+app.post("/user/searchuser", async(req, res) => {
+  if (req.session.authenticated) {
+    let isexist = false;
+    let message = "User is not found";
+    let message1 = "";
+    let message2 = "";
+    let userid = req.body.userid;
+    let details = {};
+    
+
+    let result = await db.query(
+      `SELECT * FROM Users WHERE u_id = ${userid} ;`
+    );
+    if (result.rows.length > 0) {
+      details.id = result.rows[0].u_id;
+      details.name = result.rows[0].u_name;
+      details.address = result.rows[0].u_address;
+      details.email = result.rows[0].u_email;
+      details.phone = result.rows[0].u_phone;
+
+      isexist = true;
+    }
+
+    result = await db.query(
+      `SELECT * FROM Books    
+      WHERE b_id IN 
+      (SELECT b_id FROM Borrowing WHERE u_id = ${userid}) ;`
+    );
+    
+    if (result.rows.length == 0)
+      message1 = "No books borrowed";
+    else
+      message1 = "Borrowed books: " 
+
+    let result2 = await db.query(
+      `select * from Fine inner join Books on Fine.b_id = Books.b_id where u_id=${userid};`
+    );
+
+    if (result2.rows.length == 0)
+      message2 = "No fines available";
+    else
+      message2 = "Fines: " 
+
+    if (isexist)
+    res.render("user/searchuser.ejs",{details:details,result:result,message1:message1,result2:result2, message2:message2});
+    else
+    res.render("user/searchuser.ejs",{message:message});
+
+  } else res.render("login.ejs");
+}); 
 
 
 app.listen(PORT, () => {
