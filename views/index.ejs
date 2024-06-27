@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Application</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/layout.css">
 </head>
 <body>
     <%- include("partials/header.ejs") %>
     <div class="container-fluid">
-        <div class="d-flex justify-content-center align-items-center full-height">
-            text
-        </div>    
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column align-items-center">
+                <div class="kontainer-button">
+                    <input class="button-input "type="button" value="Borrow book" onclick="window.location.href='/borrowing/borrow';"> 
+                </div>
+    
+                <div class="kontainer-button">
+                    <input class="button-input "type="button" value="Return book" onclick="window.location.href='/borrowing/return';"> 
+                </div>
+                <div class="kontainer-button">
+                    <input class="button-input "type="button" value="Search book" onclick="window.location.href='/book/searchbook';"> 
+                </div>
+                
+            </div>
+
+        </div>
     </div>
 </body>
 </html>

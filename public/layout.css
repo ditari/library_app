@@ -9,16 +9,56 @@ html, body{
     color: #03045E;
 }
 
-.full-height {
-    height: 100vh;
-    background-color: #90E0EF;
+.kontainer-utama {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;   
 }
 
-.col{
-    color: #03045E;
+
+
+.kontainer-button{
+    align-items: center; 
+    justify-content: center;
+    display: flex; 
+    margin : 10px;
+    padding: 10px;
 }
+
+  /* kontainer-utama
+  display: flex;
+   background-color: #90E0EF;
+    color: #03045E;*/
 
 button{
     background-color: #03045E;
     color: #90E0EF;
 }
+
+
+/*
+.full-height {
+    height: 100vh;
+    background-color: #90E0EF;
+}*/
+
+
+
+
+
+.button-input{
+    background-color: #03045E;
+    color: #90E0EF;
+   /* display: block;*/
+}
+
+
+
+/*
+.kontainer-baris{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}*/
+
