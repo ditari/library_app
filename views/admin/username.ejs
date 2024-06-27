@@ -38,20 +38,39 @@
 </head>
 <body>
     <%- include('../partials/header.ejs') %>
-    <div class="container-fluid">
+<div class="container-fluid">
+    <div class="kontainer-utama">
+
+        <div class="d-flex flex-column align-items-center">
+            <!--align-items-center yg buat teks locals.message jadi center-->
         <form id="registerForm" action="/admin/username" method="POST" onsubmit="checkUsernameAvailabilityAndSubmit(event);">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            
+            <div class="row">
+                <div class="col"><label for="username">Username:</label></div>
+                <div class="col"><input type="text" id="username" name="username" required></div>
+            </div>    
+            
             <div id="availabilityMessage"></div>
-            <button type="submit">Register</button>            
+            
+            <div class="kontainer-button"><button type="submit">Register</button> </div>            
         </form>
+        
+        
+        <div>    
         <%=locals.message%>
-        <% if (locals.newusername) { %>
-            <br> New username is <%=locals.newusername%>
+        </div>
+        
+        <div>  
+        <% if (locals.newusername) { %>     
+        New username is <%=locals.newusername%> 
         <% } %>
+        </div>    
+
+        
+        </div>
 
     </div>
-
+</div>
 
 </body>
 </html>

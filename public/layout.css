@@ -16,6 +16,23 @@ html, body{
     height: 100vh;   
 }
 
+/*
+.kontainer-teks{
+    align-items: center; 
+    justify-content: center;
+    display: flex;
+}
+
+.message-container {
+    text-align: center; 
+}
+*/
+
+.kontainer-teks{
+    justify-content: left; 
+    text-align: left;
+    display: flex; 
+}
 
 
 .kontainer-button{

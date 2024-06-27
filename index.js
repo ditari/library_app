@@ -258,22 +258,26 @@ app.get("/admin/username", (req, res) => {
 
 //post change admin username
 app.post("/admin/username", async (req, res) => {
-  if (req.session.authenticated) {
+  if (req.session.authenticated) 
   {
     let message = "Cannot change the admin username";
     const username = req.body.username;
-    const result = await db.query(
-      `UPDATE Admin SET a_username = '${username}' where a_id = ${admin_id} returning *;`
+    
+
+    //check if username is already used
+    let result = await db.query(
+      `select * from Admin where a_username = '${username}';`
     );
-    if (result.rows.length>0)
+    if (result.rows.length==0)
     {
-      message = "Admin username succesfully changed"; 
-      res.render("admin/username.ejs", {message:message, newusername:username});
-  
-    }     
+      result = await db.query(
+        `UPDATE Admin SET a_username = '${username}' where a_id = ${admin_id} returning *;`
+      );          
+        message = "Admin username succesfully changed"; 
+        res.render("admin/username.ejs", {message:message, newusername:username});        
+    }  
     else
-     res.render("admin/username.ejs", {message:message});
-  }  
+      res.render("admin/username.ejs", {message:message});
 
   } else res.render("login.ejs");
  
