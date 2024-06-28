@@ -7,39 +7,57 @@
     <link rel="stylesheet" href="/layout.css">
 </head>
 <body>
+
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/book/check-bookid" method="post">
-            <label for="bookid">Book ID:</label> 
-            <input type="text" id="bookid" name="bookid" value="<%=locals.bookid%>" required> 
-            <button type="submit">Check</button>
-        </form>    
-            <div> <%=locals.message%> </div>
+    <div class="kontainer-utama">
+    <div class="d-flex flex-column">    
+               
+        <div> <p>Edit book information</p></div>   
 
+        <form action="/book/check-bookid" method="post">
+        
+            <div class="row">
+                <div class="col"><label for="bookid">Book ID:</label></div>
+                <div class="col"><input type="text" id="bookid" name="bookid" value="<%=locals.bookid%>" required></div>
+            </div>  
+            <div class="kontainer-button"><button type="submit">Check</button></div>
+            
+        </form>    
+            <div><p> <%=locals.message%></p> </div>
 
         <form action="/book/editbook" method="post">
         <input type="hidden" id="newbookid" name="newbookid" value="<%=locals.bookid%>"> 
         
-        <label for="name">Title:</label> 
-        <input type="text" id="newname" name="newname" value="<%=locals.name%>" required> 
-        <br>
-        <label for="name">Author:</label> 
-        <input type="text" id="newauthor" name="newauthor" value="<%=locals.author%>" required> 
-        <br>
-        <label for="name">Category:</label> 
-        <input type="text" id="newcategory" name="newcategory" value="<%=locals.category%>" required> 
-        <br>
-        <label for="name">ISBN:</label> 
-        <input type="text" id="newisbn" name="newisbn" value="<%=locals.isbn%>" required> 
-        <br>
+        <div class="row">
+            <div class="col"><label for="name">Title:</label></div>
+            <div class="col"><input type="text" id="newname" name="newname" value="<%=locals.name%>" required></div>
+        </div>    
+        
+        <div class="row">
+            <div class="col"><label for="name">Author:</label></div>
+            <div class="col"><input type="text" id="newauthor" name="newauthor" value="<%=locals.author%>" required></div>
+        </div>
 
-        <button type="submit">Update</button>
+        <div class="row">
+            <div class="col"><label for="name">Category:</label></div>
+            <div class="col"><input type="text" id="newcategory" name="newcategory" value="<%=locals.category%>" required></div>
+        </div>
 
+        <div class="row">
+            <div class="col"><label for="name">ISBN:</label></div>
+            <div class="col"><input type="text" id="newisbn" name="newisbn" value="<%=locals.isbn%>" required></div>
+        </div>    
+
+        <div class="kontainer-button"><button type="submit">Update</button></div>
+        
         </form>    
-        <%=locals.message2%>
+        
+        <div><p><%=locals.message2%></p><div>
 
+        <div>    
         <% if (locals.details) { %>
-        </br>Details:</br>
+        <p>Details:</p>
         <ul>    
         <li>Book ID : <%= locals.details.id %></li>
         <li>Title: <%=locals.details.bookname%></li>
@@ -48,7 +66,10 @@
         <li>ISBN: <%=locals.details.isbn%></li>
         </ul>
         <%}%>
+        </div>
 
+    </div>
+    </div>    
     </div>
 </body>
 </html>

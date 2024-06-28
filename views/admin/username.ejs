@@ -43,12 +43,9 @@
 
         <div class="d-flex flex-column">
             <!--align-items-center yg buat teks locals.message jadi center-->
-            <div>
-                Add a new book
-            </div>    
+            <div> <p>Change admin username</p></div>   
 
             <form id="registerForm" action="/admin/username" method="POST" onsubmit="checkUsernameAvailabilityAndSubmit(event);">
-            
             
             <div class="row">
                 <div class="col"><label for="username">Username:</label></div>
@@ -62,12 +59,12 @@
         
         
         <div>    
-        <%=locals.message%>
+        <p><%=locals.message%></p>
         </div>
         
         <div>  
         <% if (locals.newusername) { %>     
-        New username is <%=locals.newusername%> 
+        <p>New username is <%=locals.newusername%></p> 
         <% } %>
         </div>    
 

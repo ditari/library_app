@@ -9,15 +9,28 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/book/deletebook" method="post">
-        <label for="bookid">Book ID:</label> 
-        <input type="text" id="bookid" name="bookid" required> 
-        <button type="submit">Delete</button>
+    <div class="kontainer-utama">
+    <div class="d-flex flex-column">    
+        
+        <div> <p>Delete a book</p></div>   
 
-        </form>    
-        <%=locals.message%>
+        <form action="/book/deletebook" method="post">
+
+        <div class="row">
+            <div class="col"><label for="bookid">Book ID:</label></div>
+            <div class="col"><input type="text" id="bookid" name="bookid" required></div>
+        </div>    
+
+        <div class="kontainer-button"><button type="submit">Delete</button></div>
+        </form>
+        
+        <div>
+        <p><%=locals.message%></p>
+        </div>
+
+        <div>
             <% if (locals.details && locals.details.id) { %>
-            </br>Details:</br>
+            <p>Details:</p>
             <ul>    
             <li>Book ID : <%= locals.details.id %></li>
             <li>Title: <%=locals.details.bookname%></li>
@@ -26,8 +39,9 @@
             <li>ISBN: <%=locals.details.isbn%></li>
             </ul>
             <%}%>
-
-
+        </div>    
+    </div>        
+    </div>        
     </div>
 </body>
 </html>

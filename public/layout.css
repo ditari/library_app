@@ -16,7 +16,9 @@ html, body{
     height: 100vh;   
 }
 
-.col{margin:10px;}
+.col{margin:5px;}
+
+p{margin:5px;}
 /*
 .kontainer-teks{
     align-items: center; 
@@ -28,20 +30,21 @@ html, body{
     text-align: center; 
 }
 */
-
+/*
 .kontainer-teks{
     justify-content: left; 
     text-align: left;
     display: flex; 
-}
+}*/
 
 
 .kontainer-button{
-    align-items: center; 
+/*    align-items: center; 
     justify-content: center;
+       padding: 10px; */
     display: flex; 
-    margin : 10px;
-    padding: 10px;
+    margin : 5px;
+ 
 }
 
   /* kontainer-utama
