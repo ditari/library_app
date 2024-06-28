@@ -41,9 +41,14 @@
 <div class="container-fluid">
     <div class="kontainer-utama">
 
-        <div class="d-flex flex-column align-items-center">
+        <div class="d-flex flex-column">
             <!--align-items-center yg buat teks locals.message jadi center-->
-        <form id="registerForm" action="/admin/username" method="POST" onsubmit="checkUsernameAvailabilityAndSubmit(event);">
+            <div>
+                Add a new book
+            </div>    
+
+            <form id="registerForm" action="/admin/username" method="POST" onsubmit="checkUsernameAvailabilityAndSubmit(event);">
+            
             
             <div class="row">
                 <div class="col"><label for="username">Username:</label></div>

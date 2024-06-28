@@ -9,25 +9,46 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/book/addbook" method="post">
-        <label for="name">Title:</label> 
-        <input type="text" id="bookname" name="bookname" required> 
-        <br>
-        <label for="name">Author:</label> 
-        <input type="text" id="author" name="author" required> 
-        <br>
-        <label for="name">Category:</label> 
-        <input type="text" id="category" name="category" required> 
-        <br>
-        <label for="name">ISBN:</label> 
-        <input type="text" id="isbn" name="isbn" required> 
-        <br>
-        <button type="submit">Add</button>
+    <div class="kontainer-utama">
+    <div class="d-flex flex-column">
+     
+        <div> <p>Add a new book</p>
+        </div>   
 
-        </form>    
+        <form action="/book/addbook" method="post">
+
+        <div class="row"><div class="col">
+            <label for="name">Title:</label></div>
+            <div class="col"><input type="text" id="bookname" name="bookname" required></div>
+        </div>
+
+        <div class="row">
+            <div class="col"><label for="name">Author:</label></div>
+            <div class="col"><input type="text" id="author" name="author" required></div>
+        </div>
+
+        <div class="row">
+            <div class="col"><label for="name">Category:</label></div>
+            <div class="col"><input type="text" id="category" name="category" required></div>
+        </div>
+
+        <div class="row">
+            <div class="col"><label for="name">ISBN:</label></div>
+            <div class="col"><input type="text" id="isbn" name="isbn" required></div>
+        </div>
+
+        <div class="kontainer-button">
+        <button type="submit">Add</button>
+        </div>    
+        </form>
+            
+        <div>
         <%=locals.message%>
+        </div>
+
+        <div>
             <% if (locals.details && locals.details.id) { %>
-            </br>Details:</br>
+            <p>Details:</p>
             <ul>    
             <li>Book ID: <%= locals.details.id %></li>
             <li>Title: <%=locals.details.name%></li>
@@ -36,8 +57,9 @@
             <li>ISBN: <%=locals.details.isbn%></li>
             </ul>
             <%}%>
-
-
+        </div>    
+    </div>        
+    </div>        
     </div>
 </body>
 </html>

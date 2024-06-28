@@ -16,6 +16,7 @@ html, body{
     height: 100vh;   
 }
 
+.col{margin:10px;}
 /*
 .kontainer-teks{
     align-items: center; 
