@@ -203,29 +203,48 @@ app.get("/user/deleteuser", (req, res) => {
 app.post("/user/deleteuser", async (req, res) => {
     if (req.session.authenticated) {
       const userid = req.body.userid;
-      let message = `Cannot delete user from library database`;
-      let details = {};
-        //check if book exist
-        let result = await db.query(
-          `SELECT * FROM Users WHERE u_id = ${userid} ;`
+      let details = {};      
+      let message = "";
+
+      //check if user exist in fine or borrowing
+      let result1 = await db.query(
+        `SELECT * FROM Borrowing WHERE u_id = ${userid} ;`
+      );
+
+      let result2 = await db.query(
+          `SELECT * FROM Fine WHERE u_id = ${userid} ;`
         );
+
+      if (result1.rows.length > 0 || result2.rows.length > 0) 
+      {
+        message = "User cannot be deleted";
+        res.render("user/deleteuser.ejs", { message: message}); 
+      }
+      else
+      {
+        let result = await db.query(
+          `DELETE FROM Users WHERE u_id = ${userid} returning * ;`
+        );
+
         if (result.rows.length > 0) {
-          //delete
-          result = await db.query(
-            `DELETE FROM Users WHERE u_id = ${userid} RETURNING *;`
-          );
-          if (result.rows.length > 0) {
-            details.id = result.rows[0].u_id;
-            details.name = result.rows[0].u_name;
-            details.address = result.rows[0].u_address;
-            details.email = result.rows[0].u_email;
-            details.phone = result.rows[0].u_phone;
-          }
-        } else {
-          message = `The user does not exist in the library database`;
+          details.id = result.rows[0].u_id;
+          details.name = result.rows[0].u_name;
+          details.address = result.rows[0].u_address;
+          details.email = result.rows[0].u_email;
+          details.phone = result.rows[0].u_phone;
+          message = `The user is successfully deleted from the database`;  
+          res.render("user/deleteuser.ejs", { message: message, details: details });
         }
-      res.render("user/deleteuser.ejs", { message: message, details: details });
-    } else res.render("login.ejs");
+        else
+        {
+          message = "User does not exist in database";
+          res.render("user/deleteuser.ejs", { message: message}); 
+
+        }
+
+      }
+      } 
+      else res.render("login.ejs");
   });
 
  //logout admin
