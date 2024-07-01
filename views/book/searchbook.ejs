@@ -10,8 +10,14 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column">    
         <form action="/book/searchbook" method="post">
-            Search book by:
+            <div> <p>Search book</p></div>  
+            
+            <div class="row">
+                <div class="col">Search book by:</div>
+            <div class="col">
             <select id="dropdown" name="choice" onchange="showInputField()">
                 <option value=""></option>
                 <option value="1">Book ID</option>
@@ -20,13 +26,14 @@
                 <option value="4">Category</option>
                 <option value="5">ISBN</option>
             </select>
-            <br>
+            </div></div>
+
             <div id="inputContainer" class="row"></div>
 
-            <button id="searchbutton" type="submit" hidden>Search</button>
+            <div class="kontainer-button"><button id="searchbutton" type="submit" hidden>Search</button></div>
         </form>
         <% if (locals.isbookexist) { %>
-            <table>
+            <table class="aligned-table">
                 <thead>
                     <tr>
                         <th>Book ID</th>
@@ -50,6 +57,8 @@
             </table>     
         <% } %>
         <%= locals.message %>    
+    </div>
+    </div>
     </div>
 
     
