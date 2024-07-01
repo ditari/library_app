@@ -129,29 +129,51 @@ app.get("/book/deletebook", (req, res) => {
 app.post("/book/deletebook", async (req, res) => {
   if (req.session.authenticated) {
     const bookid = req.body.bookid;
-    let message = `Cannot delete book from library database`;
+    let message = "";
     let details = {};
-      //check if book exist
-      let result = await db.query(
-        `SELECT * FROM Books WHERE b_id = ${bookid} ;`
+      //check if book exist in fine or borrowing
+      let result1 = await db.query(
+        `SELECT * FROM Borrowing WHERE b_id = ${bookid} ;`
       );
-      if (result.rows.length > 0) {
-        //delete
-        result = await db.query(
-          `DELETE FROM Books WHERE b_id = ${bookid} RETURNING *;`
+
+      let result2 = await db.query(
+          `SELECT * FROM Fine WHERE b_id = ${bookid} ;`
         );
-        if (result.rows.length>0) {
-          message = `The book is successfully deleted from library database`;
+
+      if (result1.rows.length > 0 || result2.rows.length > 0) 
+      {
+        message = "The book cannot be deleted";
+        res.render("book/deletebook.ejs", { message: message}); 
+      }
+      else
+      {
+        let result = await db.query(
+          `DELETE FROM Books WHERE b_id = ${bookid} returning * ;`
+        );
+
+        if (result.rows.length > 0)
+        {
           details.id = result.rows[0].b_id;
           details.bookname = result.rows[0].b_bookname;
           details.author = result.rows[0].b_author;
           details.category = result.rows[0].b_category;
           details.isbn = result.rows[0].isbn;
+          message = "The book successfully deleted";
+       
+          res.render("book/deletebook.ejs", { message: message, details: details }); 
         }
-      } else {
-        message = `The book does not exist in the library database`;
+        else
+        {
+          message = "The book does not exist in database";
+          res.render("book/deletebook.ejs", { message: message});
+        }
+
       }
-    res.render("book/deletebook.ejs", { message: message, details: details });
+
+
+
+
+
   } else res.render("login.ejs");
 });
 
