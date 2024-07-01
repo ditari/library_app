@@ -9,23 +9,34 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column">
+    
         <form action="/user/adduser" method="post">
-        <label for="name">Name:</label> 
-        <input type="text" id="name" name="name" required> 
-        <br>
-        <label for="address">Address:</label> 
-        <input type="text" id="address" name="address" required> 
-        <br>
-        <label for="phone">Phone:</label> 
-        <input type="text" id="phone" name="phone" required> 
-        <br>
-        <label for="email">Email:</label> 
-        <input type="text" id="email" name="email" required> 
-        <br>
-        <button type="submit">Add</button>
+
+            <div class="row"><div class="col">
+                <label for="name">Name:</label></div><div class="col">
+                <input type="text" id="name" name="name" required></div></div>
+            <div class="row">
+                <div class="col"><label for="address">Address:</label></div>
+                <div class="col"><input type="text" id="address" name="address" required></div>
+            </div>
+            
+            <div class="row">
+                <div class="col"><label for="phone">Phone:</label></div>
+                <div class="col"><input type="text" id="phone" name="phone" required></div>
+            </div>
+            
+            <div class="row">
+                <div class="col"><label for="email">Email:</label></div>
+                <div class="col"><input type="text" id="email" name="email" required></div>
+            </div>
+         
+        <div class="kontainer-button"><button type="submit">Add</button></div>
 
         </form>    
-        <%=locals.message%>
+        <div><p><%=locals.message%></p></div>
+        <div>
             <% if (locals.details && locals.details.id) { %>
             </br>Details: </br>
             <ul>    
@@ -36,7 +47,7 @@
             <li>Email: <%=locals.details.email%></li>
             </ul>
             <%}%>
-
+        </div>    
 
     </div>
 </body>
