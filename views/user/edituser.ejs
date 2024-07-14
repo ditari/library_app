@@ -9,36 +9,53 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
+    <div class="kontainer-utama">
+    <div class="d-flex flex-column">        
+        
         <form action="/user/check-userid" method="post">
-            <label for="userid">User ID:</label> 
-            <input type="text" id="userid" name="userid" value="<%=locals.userid%>" required> 
-            <button type="submit">Check</button>
+            <div class="row">
+                <div class="col"><label for="userid">User ID:</label></div> 
+                <div class="col"><input type="text" id="userid" name="userid" value="<%=locals.userid%>" required></div> 
+            </div>    
+            <div class="kontainer-button"><button type="submit">Check</button></div>
         </form>    
-            <div> <%=locals.message%> </div>
+            <div> <p> <%=locals.message%></p> </div>
 
 
         <form action="/user/edituser" method="post">
         <input type="hidden" id="newuserid" name="newuserid" value="<%=locals.userid%>"> 
         
-        <label for="name">Name:</label> 
-        <input type="text" id="newname" name="newname" value="<%=locals.name%>" required> 
-        <br>
-        <label for="name">Address:</label> 
-        <input type="text" id="newaddress" name="newaddress" value="<%=locals.address%>" required> 
-        <br>
-        <label for="name">Phone:</label> 
-        <input type="text" id="newphone" name="newphone" value="<%=locals.phone%>" required> 
-        <br>
-        <label for="name">Email:</label> 
-        <input type="text" id="newemail" name="newemail" value="<%=locals.email%>" required> 
-        <br>
+        
+        <div class="row">
+            <div class="col"><label for="name">Name:</label></div>            
+            <div class="col"><input type="text" id="newname" name="newname" value="<%=locals.name%>" required></div>
+        </div>
+        
+        <div class="row">
+            <div class="col"><label for="name">Address:</label></div>            
+            <div class="col"><input type="text" id="newaddress" name="newaddress" value="<%=locals.address%>" required></div>
+        </div>         
+ 
+        <div class="row">
+            <div class="col">        <label for="name">Phone:</label>             </div>            
+            <div class="col">        <input type="text" id="newphone" name="newphone" value="<%=locals.phone%>" required>             </div>
+        </div>
 
-        <button type="submit">Update</button>
+        <div class="row">
+            <div class="col">        <label for="name">Email:</label> 
+            </div>            
+            <div class="col">        <input type="text" id="newemail" name="newemail" value="<%=locals.email%>" required> 
+            </div>
+        </div>
+
+
+        <div class="kontainer-button"><button type="submit">Update</button></div>
 
         </form>    
-        <%=locals.message2%>
-        <% if (locals.details) { %>
-        </br>Details: </br>
+        <div><p><%=locals.message2%></p></div>
+ 
+        <div>        <% if (locals.details) { %>
+        <p>Details: </p>
         <ul>    
         <li>User ID : <%= locals.details.id %></li>
         <li>Name: <%=locals.details.name%></li>
@@ -47,8 +64,11 @@
         <li>Email: <%=locals.details.email%></li>
         </ul>
         <%}%>
+    </div>
 
 
+    </div>    
+    </div>    
     </div>
 </body>
 </html>
