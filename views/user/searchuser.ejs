@@ -5,19 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Application</title>
     <link rel="stylesheet" href="/layout.css">
+
 </head>
 <body>
     <%- include('../partials/header.ejs') %>
-    <div class="container-fluid">
+        <div class="container-fluid">
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column">    
+
+                <div> <p>User info:</p></div>  
+
+
         <form action="/user/searchuser" method="post">
-        <label for="userid">User ID:</label> 
-        <input type="text" id="userid" name="userid" required> 
-        <button type="submit">Search</button>
+        <div class="row">
+            <div class="col"><label for="userid">User ID:</label> </div> 
+                <div class="col"><input type="text" id="userid" name="userid" required> </div>
+        </div>    
+
+        <div class="kontainer-button"><button type="submit">Search</button></div>
 
         </form>    
-        <%=locals.message%>
+        <p><%=locals.message%></p>
             <% if (locals.details) { %>
-            </br>Details:</br>
+            <p>Details:</p>
+            <div>
             <ul>    
             <li>User ID : <%= locals.details.id %></li>
             <li>Name: <%=locals.details.name%></li>
@@ -25,39 +36,47 @@
             <li>Phone: <%=locals.details.phone%></li>
             <li>Email: <%=locals.details.email%></li>
             </ul>
+            </div>
             <%}%>
 
             <% if (locals.message1) { %>
-                <%=locals.message1%>
+                <p><%=locals.message1%></p>
                 <% result.rows.forEach(obj => { %>
-                <table>
-                    <tr>
-                        <th>Book ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Category</th>
-                        <th>ISBN</th>
-                    </tr>
-                    <tr>    
-                        <td><%= obj.b_id %></td>
-                        <td><%= obj.b_name %></td>
-                        <td><%= obj.b_author %></td>
-                        <td><%= obj.b_category %></td>
-                        <td><%= obj.ISBN %></td>
-                    </tr>
-                </table>    
+                    <table class="aligned-table">
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>ISBN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>    
+                                <td><%= obj.b_id %></td>
+                                <td><%= obj.b_name %></td>
+                                <td><%= obj.b_author %></td>
+                                <td><%= obj.b_category %></td>
+                                <td><%= obj.ISBN %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                        
                 <% }); %>
             <%}%>    
         
             <% if (locals.message2) { %>
-                <%=locals.message2%>
-                <table>
+                <p><%=locals.message2%></p>
+                <table class="aligned-table">
+                    <thead>
                     <tr>
                         <th>Book ID</th>
                         <th>Fine Amount</th>
                         <th>Paid Status</th>
                     </tr>
-
+                    </thead>
+                    <tbody>
                 <% result2.rows.forEach(obj => { %>
                     <tr>    
                         <td><%= obj.b_name %></td>
@@ -65,6 +84,7 @@
                         <td><%= obj.paid_status %></td>
                     </tr>
                 <% }); %>
+            </tbody>
                 </table>    
 
             <%}%>    
