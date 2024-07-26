@@ -10,15 +10,20 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column">
         <form action="/borrowing/fine" method="post">
-            Search fine by:
+            <div class="row">
+            <div class="col"><label for="search">Search by:</label></div>
+            <div class="col">
             <select id="dropdown" name="choice" onchange="showInputField()">
                 <option value=""></option>
                 <option value="1">User ID</option>
                 <option value="2">Unpaid fine</option>
                 <option value="3">All</option>
             </select>
-            <br>
+            </div>
+            </div>
             <div id="inputContainer" class="row"></div>
 
             <button id="searchbutton" type="submit" hidden>Search</button>
@@ -26,13 +31,13 @@
     
         <div id ="searchresult">
         <% if (locals.isfineexist) { %>
-            <table>
+            <table class="aligned-table">
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Book</th>
                         <th>Fine Amount</th>
-                        <th>Status</th>
+                        <th>Paid status</th>
                     </tr>
                 </thead>
                 <tbody>

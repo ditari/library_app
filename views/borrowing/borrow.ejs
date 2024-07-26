@@ -9,19 +9,34 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
+        <div class="kontainer-utama">
+            <div class="d-flex flex-column">
+        
+                <div> <p>Borrowing</p>
+                </div>   
+        
         <form action="/borrowing/borrow" method="post">
-        <label for="bookid">Book ID:</label> 
-        <input type="text" id="bookid" name="bookid" required> 
-        <br>
-        <label for="userid">User ID:</label> 
-        <input type="text" id="userid" name="userid" required> 
-        <br>
-        <button type="submit">Borrow</button>
+        
+            <div class="row">
+            <div class="col"><label for="bookid">Book ID:</label> </div> 
+                <div class="col"><input type="text" id="bookid" name="bookid" required> </div>
+            </div>
 
-        </form>    
-        <%=locals.message%>
+            <div class="row">
+               
+            <div class="col"><label for="userid">User ID:</label></div> 
+            <div class="col"><input type="text" id="userid" name="userid" required></div> 
+            </div>
+
+            <div class="kontainer-button">
+        <button type="submit">Borrow</button></div>
+
+        </form> <div><p>   
+        <%=locals.message%></p></div>
             <% if (locals.details) { %>
-            </br>Details:</br>
+             <div>   
+            <p>Details:</p>
+
             <ul>    
             <li>Title: <%= locals.details.bookname %></li>
             <li>Author: <%=locals.details.author%></li>
@@ -30,8 +45,10 @@
 
             </ul>
             <%}%>
-
-
+        </div>
+        
+            </div>
+            </div>        
     </div>
 </body>
 </html>

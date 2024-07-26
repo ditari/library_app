@@ -9,29 +9,45 @@
 <body>
     <%- include('../partials/header.ejs') %>
     <div class="container-fluid">
-        <form action="/borrowing/return" method="post">
-        <label for="bookid">Book ID:</label> 
-        <input type="text" id="bookid" name="bookid" required> 
-        <button type="submit">Return</button>
+        <div class="kontainer-utama">
+        <div class="d-flex flex-column">
+            
+            <div> <p>Returning</p>
+            </div>   
+        
+            <form action="/borrowing/return" method="post">
+            <div class="row">
+            <div class="col"> <label for="bookid">Book ID:</label> </div> 
+            <div class="col"><input type="text" id="bookid" name="bookid" required> </div>
+            </div>    
+            <div class="kontainer-button">
+            <button type="submit">Return</button> </div>
 
         </form>    
-        <%=locals.message%>
+        <div><p><%=locals.message%></p></div>
+        <div>
         <% if (locals.details) { %>
-        </br>Details:</br>
+        <p>Details:</p>
         <ul>    
         <li>Title: <%= locals.details.bookname %></li>
         <li>Author: <%=locals.details.author%></li>
         <li>Borrowed by: <%=locals.details.username%></li>
         <li>Return date: <%=locals.details.returndate%></li>
+        </ul>
+    </div>
         <%}%>    
         <% if (locals.finemessage) { %>
+            <div> <p>
             <%=locals.finemessage%>
             <form action="/borrowing/payfine" method="post">
             <input type="hidden" id="fineid" name="fineid" value="<%=locals.fineid%>">
             <button type="submit">Pay Fine</button> 
             </form>
-
+            </p>
+            </div>
         <%}%>
+        </div>
 
+        </div>        
     </div>
 </html>
